@@ -1,0 +1,62 @@
+-- 웹서버 포트 확인
+SELECT dbms_xdb.gethttpport() FROM DUAL;
+-- 웹서버 포트 변경
+EXEC dbms_xdb.sethttpport(9090);
+
+-- 계정 생성
+CREATE USER rock IDENTIFIED BY 4444
+DEFAULT tablespace users
+TEMPORARY tablespace temp;
+
+-- 권한주기(접속권한, 최고권한)
+GRANT CONNECT, DBA TO rock;
+
+-- 시퀀스 생성 문법
+CREATE SEQUENCE [시퀀스명]
+INCREMENT BY [증감숫자]
+START WITH [시작숫자]
+nominvalue OR MINVALUE [최소값]
+nomaxvalue OR MAXVALUE [최대값]
+CYCLE OR nocycle
+cache OR nocache
+
+
+-- 테이블 생성 및 더미 데이터 생성
+-- 제거문 
+DROP TABLE TBL_BOARD purge;
+DROP SEQUENCE seq_board;
+-- 휴지통 비우기
+purge recyclebin;
+
+-- 시퀀스 생성
+CREATE SEQUENCE seq_board
+INCREMENT BY 1
+START WITH 0
+MINVALUE 0
+MAXVALUE 9999999999;
+-- 시퀀스 조회
+SELECT * FROM USER_SEQUENCES
+SELECT seq_board.currval FROM dual;
+
+-- 테이블 생성
+CREATE TABLE tbl_board(
+	bno number(10,0),
+	title varchar2(200) NOT NULL,
+	content varchar2(2000) NOT NULL,
+	writer varchar2(50) NOT NULL,
+	regdate DATE DEFAULT sysdate,
+	updatedate DATE DEFAULT sysdate
+);
+-- 기본키 설정
+ALTER TABLE tbl_board ADD CONSTRAINT pk_board PRIMARY key(bno);
+-- 더미 데이터 추가
+INSERT INTO tbl_board(bno, title, content, writer)
+values(seq_board.nextval, '테스트 제목','테스트 내용','user00');
+
+SELECT * FROM TBL_BOARD
+
+COMMIT -- 항상 수동 처리
+
+
+select * from tbl_board where bno > 0
+select * from tbl_board where bno = 5
