@@ -1,6 +1,7 @@
 package org.zerock.config;
 
 import javax.servlet.Filter;
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration.Dynamic;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -26,13 +27,15 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	@Override
 	protected void customizeRegistration(Dynamic registration) {
 		registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
+																			//(String location, long maxFileSize, long maxRequestSize, int fileSizeThreshold)  
+		MultipartConfigElement multipartConfig = new MultipartConfigElement("D:\\upload\\tmp", 20971520, 41943040, 20971520);
+		registration.setMultipartConfig(multipartConfig);
 	}
 	
 	// 한글 깨짐 현상 발생시 UTF-8 필터 적용
 	@Override
 	protected Filter[] getServletFilters() {
-		CharacterEncodingFilter characterEncodingFilter = 
-				new CharacterEncodingFilter();
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
 		characterEncodingFilter.setEncoding("UTF-8");
 		characterEncodingFilter.setForceEncoding(true);
 		

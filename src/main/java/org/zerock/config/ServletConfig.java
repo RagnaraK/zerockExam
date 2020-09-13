@@ -5,7 +5,9 @@ import java.io.IOException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
@@ -45,6 +47,12 @@ public class ServletConfig implements WebMvcConfigurer {
 		resolver.setUploadTempDir(new FileSystemResource("D:\\upload\\tmp"));
 		resolver.setDefaultEncoding("UTF-8");	// 파일이름이 한글일경우처리
 		
+		return resolver;
+	}
+	
+	@Bean
+	public MultipartResolver multipartResolver() {	// MultipartResolver Bean 추가
+		StandardServletMultipartResolver resolver = new StandardServletMultipartResolver();
 		return resolver;
 	}
 }
